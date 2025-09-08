@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reader_tracker/models/book.dart';
 import 'package:reader_tracker/network/network.dart';
-import 'package:reader_tracker/pages/books_details.dart';
+import 'package:reader_tracker/utils/bookDetailsArguments.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/detailes');
+                          Navigator.pushNamed(
+                            context,
+                            '/detailes',
+                            arguments: BookDetailsArguments(itemBook: book),
+                          );
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(
@@ -96,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                book.authors.join(', & ') ?? '',
+                                book.authors.join(', & '),
                                 style: Theme.of(context).textTheme.bodySmall,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,

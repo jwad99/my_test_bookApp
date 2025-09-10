@@ -1,10 +1,9 @@
 import 'package:path/path.dart';
 import 'package:reader_tracker/models/book.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class DatabaseHelper {
-  static const _databaseName = 'books_database.db';
+  static const _databaseName = 'book_database.db';
   static const _databaseVersion = 1;
   static const _tableName = 'books';
 
@@ -19,8 +18,7 @@ class DatabaseHelper {
   }
 
   _initDatabase() async {
-    //Device/data/database name
-
+    //device/data/datasename.db
     String path = join(await getDatabasesPath(), _databaseName);
     return await openDatabase(
       path,
@@ -59,6 +57,35 @@ class DatabaseHelper {
     var books = await db.query(_tableName);
     return books.isNotEmpty
         ? books.map((bookData) => Book.fromJsonDatabase(bookData)).toList()
+        : [];
+  }
+
+  Future<int> toggleFavoriteStatus(String id, bool isFavorite) async {
+    Database db = await instance.database;
+    return await db.update(
+      _tableName,
+      {'favorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> deleteBook(String id) async {
+    Database db = await instance.database;
+    return await db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Get favorite books
+  Future<List<Book>> getFavorites() async {
+    Database db = await instance.database;
+    var favBooks = await db.query(
+      _tableName,
+      where: 'favorite = ?',
+      whereArgs: [1],
+    );
+
+    return favBooks.isNotEmpty
+        ? favBooks.map((bookData) => Book.fromJsonDatabase(bookData)).toList()
         : [];
   }
 }

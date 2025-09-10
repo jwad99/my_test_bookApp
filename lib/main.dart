@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/saved': (context) => SavedScreen(),
         '/favorites': (context) => FavoritesScreen(),
-        '/detailes': (context) => BooksDetailsScreen(),
+        '/detailes': (context) => BookDetailsScreen(),
       },
       home: const MyHomePage(),
     );
